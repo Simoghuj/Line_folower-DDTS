@@ -11,38 +11,45 @@
 #define Motor_or 50,0
 #define Motor_rov 50,50
 
+#define tim 100
+#define rmot 60
+#define lmot 20
 
+bool white_line = true;
+
+int senzor0 = 0;
+int senzor1 = 0;
+int senzor2 = 0;
+int senzor3 = 0;
+int senzor4 = 0;
+int bila = 0;
+int position = 0;
 
 void run(void)
 {
-	buzzer.start();
-	delay(100);
-	buzzer.stop();
+	
+	waitForButton(BUTTON_A);
+	cal_round();
+	display.clear();
+	display.printNumToXY(getBatteryVoltage(), 2,0);
+	display.printToXY("mV", 6,0);
+	delay(1000);
+	display.clear();
 	display.printToXY("press", 1, 0);
 	display.printToXY("Button_B", 0, 1);
 	
 	waitForButton(BUTTON_B);
 	display.clear();
-	display.printNumToXY(getBatteryVoltage(), 2,0);
-	display.printToXY("mV", 6,0);
-	delay(1000);
-	cal_round();
+	buzzer.start();
+	display.print("Start!!");
+	delay(100);
+	buzzer.stop();
+	display.clear();
 	
-	bool white_line = true;
-	
-	int senzor0 = 0;
-	int senzor1 = 0;
-	int senzor2 = 0;
-	int senzor3 = 0;
-	int senzor4 = 0;
-	int bila = 0;
 	
 	while (1) 
     {
-		
-		int t = 0;
-		
-		
+
 		while(1)
 		{
 			
@@ -53,30 +60,34 @@ void run(void)
 			senzor4 = getSensorValue(4);
 			
 			bila = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
-			int roz_r = senzor3 + senzor4;
-			int roz_l = senzor0 + senzor1;
 			
-			int position = getLinePos(white_line = false);
-			rs232.sendNumber(position);
-			rs232.send("\n");
-				
-			
-			if (position < 10 )
+			position = getLinePos(white_line = false);
+		
+			if(bila < 15) // vyjel si z èáry
 			{
-				setMotorPower(0, 0);
-				
-				
-				
+			
+				setMotorPower(125,125);
+				delay (400);
+				for(int i;i!=4 ;i++){
+					setMotorPower(-125,-125);
+					delay(100);
+					setMotorPower(rmot,lmot);
+					delay(tim);
+					setMotorPower(-rmot,-lmot);
+					delay(tim);
+					setMotorPower(lmot,rmot);
+					delay(tim);
+					setMotorPower(-lmot,-rmot);
+					delay(tim);
+					tim+100;
 			}
 			
-			if(position < 2000)//zatoè vlevo (nefunguje s0 proto 2000 jinak 1000)
+			if(position < 1024)//zatoè vlevo (nefunguje s0 proto 2000 jinak 1000)
 			{
-				setMotorPower(Motor_ol);
-				
-				
-				
+				setMotorPower(Motor_ol);	
 			}
-			else if(position < 3000) //èára pod tebou
+			
+			else if(position < 3048) //èára pod tebou
 			{
 				setMotorPower(Motor_rov);	
 			}
@@ -87,26 +98,8 @@ void run(void)
 				
 			}	
 			
-			if(bila < 15) // vyjel si z èáry
-			{
-				setMotorPower(40,40);
-				delay(200);
-				setMotorPower(40,20);
-				delay(200);
-				setMotorPower(20,40);
-				delay(200);
-				
+			
 			}
-			
-			
-			if(roz_r > 1500 || roz_l > 1500) //rozdvojka (nefunguje)
-			{
-				setMotorPower(Motor_or);
-				delay (500);
-				
-			}
-			
-			
 		}
     }
 }
