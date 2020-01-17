@@ -17,7 +17,7 @@ int senzor1 = 0;
 int senzor2 = 0;
 int senzor3 = 0;
 int senzor4 = 0;
-int white_ = 0;
+//int white_ = 0;
 int last_proportional = 0;
 int integral = 0;
 int position = 0;
@@ -25,18 +25,35 @@ int position = 0;
 bool white_line = true;
 bool black = false;
 
+int white_()
+{
+	senzor0 = getSensorValue(0);
+	senzor1 = getSensorValue(1);
+	senzor2 = getSensorValue(2);
+	senzor3 = getSensorValue(3);
+	senzor4 = getSensorValue(4);
+	
+	return = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
+};
+
+
+
+
+
+
 int white()
 {
 	setMotorPower(40,40);
 	for(int i = 0; i < 800; i++)
 	{
-		senzor0 = getSensorValue(0);
-		senzor1 = getSensorValue(1);
-		senzor2 = getSensorValue(2);
-		senzor3 = getSensorValue(3);
-		senzor4 = getSensorValue(4);
+		//senzor0 = getSensorValue(0);
+		//senzor1 = getSensorValue(1);
+		//senzor2 = getSensorValue(2);
+		//senzor3 = getSensorValue(3);
+		//senzor4 = getSensorValue(4);
 		
-		white_ = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
+		//white_ = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
+		
 		position = getLinePos(white_line = false);
 		
 		if(white_ > 15)
@@ -62,10 +79,8 @@ int white()
 		white_ = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
 		position = getLinePos(white_line = false);
 		
-		
 		if(white_ > 15)
-		{
-			
+		{	
 			black = true;
 			break;
 		}
@@ -120,13 +135,14 @@ void run(void)
 		{
 			black = false;
 			white_ = 0;
-			senzor0 = getSensorValue(0);
+			/*senzor0 = getSensorValue(0);
 			senzor1 = getSensorValue(1);
 			senzor2 = getSensorValue(2);
 			senzor3 = getSensorValue(3);
 			senzor4 = getSensorValue(4);
 			
 			white_= senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
+			*/
 			position = getLinePos(white_line = false);
 			
 			rs232.sendNumber(white_);
@@ -168,7 +184,6 @@ void run(void)
 					motor_r = max-power_difference;
 				}
 			
-			
 				if(position < 1024)//zatoè vlevo (nefunguje s0 proto 2000 jinak 1000)
 				{
 					setMotorPower(Motor_ol);
@@ -182,12 +197,9 @@ void run(void)
 				else  // zatoè vpravo pokud je position < 4000
 				{
 					setMotorPower(Motor_or);
-				
 				}	
 			}
-			
-			
-			
+				
 			
 		}
     }
