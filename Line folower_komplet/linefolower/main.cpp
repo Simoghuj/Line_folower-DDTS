@@ -22,77 +22,57 @@ int last_proportional = 0;
 int integral = 0;
 int position = 0;
 
+int tick = 1000;
+
 bool white_line = true;
 bool black = false;
 
+int folow()
+{
+	for(int i = 0; i < tick; i++)
+	{
+		if(black)
+		{
+			break;
+		}
+		senzor0 = getSensorValue(0);
+		senzor1 = getSensorValue(1);
+		senzor2 = getSensorValue(2);
+		senzor3 = getSensorValue(3);
+		senzor4 = getSensorValue(4);
+		
+		white_ = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
+		position = getLinePos(white_line = false);
+	
+	
+		if(white_ > 15)
+		{
+		
+			black = true;
+			break;
+		}
+	}
+}
+
 int white()
 {
-	setMotorPower(40,40);
-	for(int i = 0; i < 800; i++)
-	{
-		senzor0 = getSensorValue(0);
-		senzor1 = getSensorValue(1);
-		senzor2 = getSensorValue(2);
-		senzor3 = getSensorValue(3);
-		senzor4 = getSensorValue(4);
-		
-		white_ = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
-		position = getLinePos(white_line = false);
-		
-		if(white_ > 15)
-		{
-			black = true;
-			break;
-		}
-	}
+	setMotorPower(50,50);
+	folow();
 	
-	/*setMotorPower(40,20);
-	for(int i = 0; i < 800; i++)
-	{
-		if(black)
-		{
-			break;
-		}
-		senzor0 = getSensorValue(0);
-		senzor1 = getSensorValue(1);
-		senzor2 = getSensorValue(2);
-		senzor3 = getSensorValue(3);
-		senzor4 = getSensorValue(4);
-		
-		white_ = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
-		position = getLinePos(white_line = false);
-		
-		
-		if(white_ > 15)
-		{
-			
-			black = true;
-			break;
-		}
+	for(int i = 0;i < 4 ;i++)
+	{	
+		setMotorPower(-50,-50);
+		folow();
+		setMotorPower(40,10);
+		folow();
+		setMotorPower(-40,-10);
+		folow();
+		setMotorPower(10,40);
+		folow();
+		setMotorPower(-10,-40);
+		folow();
+		tick = tick + 500; 
 	}
-	setMotorPower(20,40);
-	for(int i = 0; i < 800; i++)
-	{
-		if(black)
-		{
-			break;
-		}
-		senzor0 = getSensorValue(0);
-		senzor1 = getSensorValue(1);
-		senzor2 = getSensorValue(2);
-		senzor3 = getSensorValue(3);
-		senzor4 = getSensorValue(4);
-		
-		white_ = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
-		position = getLinePos(white_line = false);
-		
-		
-		if(white_ > 15)
-		{
-			black = true;
-			break;
-		}
-	}*/
 }
 
 void run(void)
@@ -110,7 +90,7 @@ void run(void)
 	display.printToXY("mV", 6,0);
 	delay(1000);
 	display.clear();
-	display.printToXY("go!", 2,0);
+	display.printToXY("go!", 3,0);
 	
 	while (1) 
     {
@@ -118,6 +98,7 @@ void run(void)
 		
 		while(power)
 		{
+			tick = 1000;
 			black = false;
 			white_ = 0;
 			senzor0 = getSensorValue(0);
