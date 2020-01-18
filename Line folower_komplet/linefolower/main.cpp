@@ -38,9 +38,6 @@ int white_()
 
 
 
-
-
-
 int white()
 {
 	setMotorPower(40,40);
@@ -51,7 +48,6 @@ int white()
 		//senzor2 = getSensorValue(2);
 		//senzor3 = getSensorValue(3);
 		//senzor4 = getSensorValue(4);
-		
 		//white_ = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
 		
 		position = getLinePos(white_line = false);
@@ -75,7 +71,6 @@ int white()
 		senzor2 = getSensorValue(2);
 		senzor3 = getSensorValue(3);
 		senzor4 = getSensorValue(4);
-		
 		white_ = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
 		position = getLinePos(white_line = false);
 		
@@ -97,11 +92,8 @@ int white()
 		senzor2 = getSensorValue(2);
 		senzor3 = getSensorValue(3);
 		senzor4 = getSensorValue(4);
-		
 		white_ = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
 		position = getLinePos(white_line = false);
-		
-		
 		if(white_ > 15)
 		{
 			black = true;
@@ -134,13 +126,12 @@ void run(void)
 		while(power)
 		{
 			black = false;
-			white_ = 0;
+			//white_ = 0;
 			/*senzor0 = getSensorValue(0);
 			senzor1 = getSensorValue(1);
 			senzor2 = getSensorValue(2);
 			senzor3 = getSensorValue(3);
 			senzor4 = getSensorValue(4);
-			
 			white_= senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
 			*/
 			position = getLinePos(white_line = false);
@@ -184,7 +175,7 @@ void run(void)
 					motor_r = max-power_difference;
 				}
 			
-				if(position < 1024)//zatoè vlevo (nefunguje s0 proto 2000 jinak 1000)
+			/*	if(position < 1024)//zatoè vlevo (nefunguje s0 proto 2000 jinak 1000)
 				{
 					setMotorPower(Motor_ol);
 				
@@ -197,11 +188,11 @@ void run(void)
 				else  // zatoè vpravo pokud je position < 4000
 				{
 					setMotorPower(Motor_or);
-				}	
+				}
+			*/		
 			}
 				
 			
 		}
     }
 }
-
