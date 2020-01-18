@@ -17,13 +17,19 @@ int senzor1 = 0;
 int senzor2 = 0;
 int senzor3 = 0;
 int senzor4 = 0;
-//int white_ = 0;
+
 int last_proportional = 0;
 int integral = 0;
 int position = 0;
 
+int tick = 1000;
+
 bool white_line = true;
 bool black = false;
+
+int white_ ();
+int white ();
+
 
 int white_()
 {
@@ -37,19 +43,12 @@ int white_()
 };
 
 
-
 int white()
 {
 	setMotorPower(40,40);
 	for(int i = 0; i < 800; i++)
 	{
-		//senzor0 = getSensorValue(0);
-		//senzor1 = getSensorValue(1);
-		//senzor2 = getSensorValue(2);
-		//senzor3 = getSensorValue(3);
-		//senzor4 = getSensorValue(4);
-		//white_ = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
-		
+			
 		position = getLinePos(white_line = false);
 		
 		if(white_ > 15)
@@ -58,22 +57,23 @@ int white()
 			break;
 		}
 	}
+}
 	
 	/*setMotorPower(40,20);
 	for(int i = 0; i < 800; i++)
+
+int folow()
+{
+	for(int i = 0; i < tick; i++)
+
 	{
 		if(black)
 		{
 			break;
 		}
-		senzor0 = getSensorValue(0);
-		senzor1 = getSensorValue(1);
-		senzor2 = getSensorValue(2);
-		senzor3 = getSensorValue(3);
-		senzor4 = getSensorValue(4);
-		white_ = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
-		position = getLinePos(white_line = false);
 		
+		position = getLinePos(white_line = false);
+
 		if(white_ > 15)
 		{	
 			black = true;
@@ -87,21 +87,39 @@ int white()
 		{
 			break;
 		}
-		senzor0 = getSensorValue(0);
-		senzor1 = getSensorValue(1);
-		senzor2 = getSensorValue(2);
-		senzor3 = getSensorValue(3);
-		senzor4 = getSensorValue(4);
-		white_ = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
 		position = getLinePos(white_line = false);
+		if(white_ > 15)
+		{
+		}
 		if(white_ > 15)
 		{
 			black = true;
 			break;
 		}
-	}*/
+	}
 }
 
+int white()
+{
+	setMotorPower(50,50);
+	folow();
+	
+	for(int i = 0;i < 4 ;i++)
+	{	
+		setMotorPower(-50,-50);
+		folow();
+		setMotorPower(40,10);
+		folow();
+		setMotorPower(-40,-10);
+		folow();
+		setMotorPower(10,40);
+		folow();
+		setMotorPower(-10,-40);
+		folow();
+		tick = tick + 500; 
+	}
+}
+*/
 void run(void)
 {
 	buzzer.start();
@@ -117,7 +135,7 @@ void run(void)
 	display.printToXY("mV", 6,0);
 	delay(1000);
 	display.clear();
-	display.printToXY("go!", 2,0);
+	display.printToXY("go!", 3,0);
 	
 	while (1) 
     {
@@ -125,19 +143,14 @@ void run(void)
 		
 		while(power)
 		{
+			tick = 1000;
 			black = false;
 			//white_ = 0;
-			/*senzor0 = getSensorValue(0);
-			senzor1 = getSensorValue(1);
-			senzor2 = getSensorValue(2);
-			senzor3 = getSensorValue(3);
-			senzor4 = getSensorValue(4);
-			white_= senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
-			*/
+			
 			position = getLinePos(white_line = false);
 			
 			rs232.sendNumber(white_);
-			rs232.send("\n\n");
+			rs232.send("\n");
 			
 			if(white_ < 500) // vyjel si z èáry
 			{
@@ -175,7 +188,7 @@ void run(void)
 					motor_r = max-power_difference;
 				}
 			
-			/*	if(position < 1024)//zatoè vlevo (nefunguje s0 proto 2000 jinak 1000)
+				/*if(position < 1024)//zatoè vlevo (nefunguje s0 proto 2000 jinak 1000)
 				{
 					setMotorPower(Motor_ol);
 				
@@ -188,8 +201,8 @@ void run(void)
 				else  // zatoè vpravo pokud je position < 4000
 				{
 					setMotorPower(Motor_or);
-				}
-			*/		
+				}*/
+					
 			}
 				
 			
