@@ -39,7 +39,7 @@ int white_()
 	senzor3 = getSensorValue(3);
 	senzor4 = getSensorValue(4);
 	
-	return = senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
+	return senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
 };
 
 
@@ -51,7 +51,7 @@ int white()
 			
 		position = getLinePos(white_line = false);
 		
-		if(white_ > 15)
+		if(white_ () > 15)
 		{
 			black = true;
 			break;
@@ -149,10 +149,10 @@ void run(void)
 			
 			position = getLinePos(white_line = false);
 			
-			rs232.sendNumber(white_);
-			rs232.send("\n");
+			//rs232.sendNumber(white_);
+			//rs232.send("\n");
 			
-			if(white_ < 500) // vyjel si z èáry
+			if(white_ () < 500) // vyjel si z èáry
 			{
 				white();
 			}
