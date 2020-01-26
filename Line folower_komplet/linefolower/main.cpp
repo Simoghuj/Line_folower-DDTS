@@ -148,6 +148,11 @@ void run(void)
 			{
 				white();
 			}
+			if(getLinePos>4096){
+				for(int t;t!=10;t++){
+					setMotorPower(40,60);
+				}
+			}
 			
 			else
 			{
