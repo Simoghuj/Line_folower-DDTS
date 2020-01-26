@@ -27,10 +27,6 @@ int tick = 1000;
 bool white_line = true;
 bool black = false;
 
-int white_ ();
-int white ();
-
-
 int white_()
 {
 	senzor0 = getSensorValue(0);
@@ -42,7 +38,7 @@ int white_()
 	return senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
 };
 
-
+/*
 int white()
 {
 	setMotorPower(40,40);
@@ -59,27 +55,27 @@ int white()
 	}
 }
 	
-	/*setMotorPower(40,20);
+	setMotorPower(40,20);
 	for(int i = 0; i < 800; i++)
-
+*/
 int folow()
 {
 	for(int i = 0; i < tick; i++)
 
 	{
-		if(black)
-		{
+		if(black){
 			break;
 		}
 		
 		position = getLinePos(white_line = false);
-
-		if(white_ > 15)
-		{	
+		
+		if(white_() > 15){	
 			black = true;
 			break;
 		}
 	}
+}
+/*
 	setMotorPower(20,40);
 	for(int i = 0; i < 800; i++)
 	{
@@ -90,15 +86,12 @@ int folow()
 		position = getLinePos(white_line = false);
 		if(white_ > 15)
 		{
-		}
-		if(white_ > 15)
-		{
 			black = true;
 			break;
 		}
 	}
 }
-
+*/
 int white()
 {
 	setMotorPower(50,50);
@@ -119,7 +112,7 @@ int white()
 		tick = tick + 500; 
 	}
 }
-*/
+
 void run(void)
 {
 	buzzer.start();
@@ -145,8 +138,7 @@ void run(void)
 		{
 			tick = 1000;
 			black = false;
-			//white_ = 0;
-			
+					
 			position = getLinePos(white_line = false);
 			
 			//rs232.sendNumber(white_);
