@@ -57,22 +57,17 @@ int folow()
 int white()
 {
 	setMotorPower(50,50);
+	folow();	
+	setMotorPower(-50,-50);
 	folow();
-	
-	for(int i = 0;i < 4 ;i++)
-	{	
-		setMotorPower(-50,-50);
-		folow();
-		setMotorPower(40,10);
-		folow();
-		setMotorPower(-40,-10);
-		folow();
-		setMotorPower(10,40);
-		folow();
-		setMotorPower(-10,-40);
-		folow();
-		tick = tick + 500; 
-	}
+	setMotorPower(40,10);
+	folow();
+	setMotorPower(-40,-10);
+	folow();
+	setMotorPower(10,40);
+	folow();
+	setMotorPower(-10,-40);
+	folow();
 }
 
 void run(void)
@@ -98,7 +93,6 @@ void run(void)
 		
 		while(power)
 		{
-			tick = 1000;
 			black = false;
 			white_ = 0;
 			senzor0 = getSensorValue(0);
