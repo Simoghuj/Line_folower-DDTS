@@ -1,10 +1,11 @@
 /*
  * Line_Folower01.cpp
  * Created: 20.12.2019 22:27:22
- * Author : Šimon Skládaný, David Skrob
+ * Author : Šimon Skládaný, David Skrob, Tomas Nazler
  */ 
 
 #include "3piLibPack.h"
+#include "math.h"
 
 #define Motor_ol motor_l,motor_r
 #define Motor_or motor_l,motor_r
@@ -22,94 +23,80 @@ int last_proportional = 0;
 int integral = 0;
 int position = 0;
 
-int tick = 1000;
+int tick = 50;
 
 bool white_line = true;
 bool black = false;
 
-int white_()
-{
+int white_(){
 	senzor0 = getSensorValue(0);
 	senzor1 = getSensorValue(1);
 	senzor2 = getSensorValue(2);
 	senzor3 = getSensorValue(3);
 	senzor4 = getSensorValue(4);
 	
+	position = getLinePos(white_line = false);
+	
 	return senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
-};
+}
 
-/*
-int white()
-{
-	setMotorPower(40,40);
-	for(int i = 0; i < 800; i++)
-	{
-			
-		position = getLinePos(white_line = false);
-		
-		if(white_ () > 15)
-		{
-			black = true;
-			break;
-		}
+void deriv(int p,int speed){
+	int proportional = ((int)position) - 2000;
+	int derivative = proportional - last_proportional;
+	
+	integral += proportional;
+	last_proportional = proportional;
+	
+	int power_difference = proportional/20 + integral/p + derivative*3/2;
+	
+	const int max = speed;
+	
+	if(power_difference > max){
+		power_difference = max;
+	}
+	
+	if(power_difference < -max){
+		power_difference = -max;
+	}
+	
+	if(power_difference < 0){
+		motor_l = max+power_difference;
+		motor_r = max;
+	}
+	
+	else{
+		motor_l = max;
+		motor_r = max-power_difference;
 	}
 }
-	
-	setMotorPower(40,20);
-	for(int i = 0; i < 800; i++)
-*/
-int folow()
-{
-	for(int i = 0; i < tick; i++)
 
-	{
-		if(black){
+
+void checkLine(int tick){
+	for (int l;l!=tick ;l++){
+		if (black){
 			break;
 		}
-		
-		position = getLinePos(white_line = false);
-		
-		if(white_() > 15){	
-			black = true;
+		white_();
+		if(white_()>499){
+			black=true;
 			break;
-		}
+		} //kdyz najdes cernou, vypadni a skipni vsechny dalsi checkLine
 	}
+		
 }
-/*
-	setMotorPower(20,40);
-	for(int i = 0; i < 800; i++)
-	{
-		if(black)
-		{
-			break;
-		}
-		position = getLinePos(white_line = false);
-		if(white_ > 15)
-		{
-			black = true;
-			break;
-		}
-	}
-}
-*/
-int white()
-{
-	setMotorPower(50,50);
-	folow();
+
+void searchForLine(){
+	for(;;){
+		setMotorPower(60,50);
+		checkLine(5000);//5000 promena ktera se bude pricitat
 	
-	for(int i = 0;i < 4 ;i++)
-	{	
-		setMotorPower(-50,-50);
-		folow();
-		setMotorPower(40,10);
-		folow();
-		setMotorPower(-40,-10);
-		folow();
-		setMotorPower(10,40);
-		folow();
-		setMotorPower(-10,-40);
-		folow();
-		tick = tick + 500; 
+		setMotorPower(0,40);// musi se jeste menit , kvuli ruznemu r kruznuce //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		delay(500);
+		setMotorPower(50,60);
+		checkLine(10000);//10000 promena ktera se bude pricitat
+		
+		setMotorPower(40,0);
+		delay(500);
 	}
 }
 
@@ -136,72 +123,40 @@ void run(void)
 		
 		while(power)
 		{
-			tick = 1000;
+			tick = 50;
 			black = false;
-					
+			
+			
+			white_();
 			position = getLinePos(white_line = false);
 			
 			//rs232.sendNumber(white_);
-			//rs232.send("\n");
+			//rs232.send("\n\n");
 			
-			if(white_ () < 500) // vyjel si z èáry
-			{
-				white();
-			}
-			if(getLinePos>4096){
-				for(int t;t!=10;t++){
-					setMotorPower(40,60);
-				}
+			if(white_()< 500){ // vyjel si z èáry
+				searchForLine();
 			}
 			
-			else
-			{
-				int proportional = ((int)position) - 2000;
-				int derivative = proportional - last_proportional;
-			
-				integral += proportional;
-				last_proportional = proportional;
-			
-				int power_difference = proportional/20 + integral/10000 + derivative*3/2;
-			
-				const int max = 60;
-			
-				if(power_difference > max)
-				{
-					power_difference = max;
+			if(white_()>2048){
+				for (int t;t!=10;t++){
+					setMotorPower(60,40);
 				}
-				if(power_difference < -max)
-				{
-					power_difference = -max;
-				}
-				if(power_difference < 0)
-				{
-					motor_l = max+power_difference;
-					motor_r = max;
-				}
-				else
-				{
-					motor_l = max;
-					motor_r = max-power_difference;
-				}
+			}
 			
-				/*if(position < 1024)//zatoè vlevo (nefunguje s0 proto 2000 jinak 1000)
-				{
-					setMotorPower(Motor_ol);
+			if(position<1024){
+				deriv(1000,200);
+			}
+			
+			if(position<4097){
+				if (position>3072){
+					deriv(1000,200);
+				}
 				
+				else{
+				deriv(5000,135);
 				}
-				else if(position < 3072) //èára pod tebou
-				{
-					setMotorPower(Motor_rov);	
-				}
-			
-				else  // zatoè vpravo pokud je position < 4000
-				{
-					setMotorPower(Motor_or);
-				}*/
-					
 			}
-				
+			
 			
 		}
     }
