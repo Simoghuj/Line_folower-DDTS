@@ -86,7 +86,7 @@ void checkLine(int tick){
 }
 
 void searchForLine(){
-	for(;;){
+	for(int x;x<4;x++){
 		setMotorPower(60,50);
 		checkLine(5000);//5000 promena ktera se bude pricitat
 	
