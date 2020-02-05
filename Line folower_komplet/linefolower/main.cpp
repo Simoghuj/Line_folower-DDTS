@@ -85,6 +85,7 @@ void checkLine(int tick){
 		
 }
 
+<<<<<<< HEAD
 void searchForLine(){
 	for(;;){
 		setMotorPower(60,50);
@@ -98,6 +99,22 @@ void searchForLine(){
 		setMotorPower(40,0);
 		delay(500);
 	}
+=======
+int white()
+{
+	setMotorPower(50,50);
+	folow();	
+	setMotorPower(-50,-50);
+	folow();
+	setMotorPower(40,10);
+	folow();
+	setMotorPower(-40,-10);
+	folow();
+	setMotorPower(10,40);
+	folow();
+	setMotorPower(-10,-40);
+	folow();
+>>>>>>> a0ddb475776fb6b1f7ee724198858db08f10ffa8
 }
 
 void run(void)
@@ -123,7 +140,10 @@ void run(void)
 		
 		while(power)
 		{
+<<<<<<< HEAD
 			tick = 50;
+=======
+>>>>>>> a0ddb475776fb6b1f7ee724198858db08f10ffa8
 			black = false;
 			
 			
