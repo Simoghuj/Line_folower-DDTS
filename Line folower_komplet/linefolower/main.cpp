@@ -7,9 +7,9 @@
 #include "3piLibPack.h"
 #include "math.h"
 
-#define Motor_ol motor_l,motor_r
-#define Motor_or motor_l,motor_r
-#define Motor_rov motor_l,motor_r
+#define MOTOR_OL motor_l,motor_r
+#define MOTOR_OR motor_l,motor_r
+#define MOTOR_ROV motor_l,motor_r
 
 int motor_r = 0;
 int motor_l = 0;
@@ -28,7 +28,7 @@ int tick = 50;
 bool white_line = true;
 bool black = false;
 
-int white_(){
+int sumPos(){
 	senzor0 = getSensorValue(0);
 	senzor1 = getSensorValue(1);
 	senzor2 = getSensorValue(2);
@@ -76,8 +76,8 @@ void checkLine(int tick){
 		if (black){
 			break;
 		}
-		white_();
-		if(white_()>499){
+		sumPos();
+		if(sumPos()>499){
 			black=true;
 			break;
 		} //kdyz najdes cernou, vypadni a skipni vsechny dalsi checkLine
@@ -85,7 +85,6 @@ void checkLine(int tick){
 		
 }
 
-<<<<<<< HEAD
 void searchForLine(){
 	for(;;){
 		setMotorPower(60,50);
@@ -99,22 +98,6 @@ void searchForLine(){
 		setMotorPower(40,0);
 		delay(500);
 	}
-=======
-int white()
-{
-	setMotorPower(50,50);
-	folow();	
-	setMotorPower(-50,-50);
-	folow();
-	setMotorPower(40,10);
-	folow();
-	setMotorPower(-40,-10);
-	folow();
-	setMotorPower(10,40);
-	folow();
-	setMotorPower(-10,-40);
-	folow();
->>>>>>> a0ddb475776fb6b1f7ee724198858db08f10ffa8
 }
 
 void run(void)
@@ -140,24 +123,21 @@ void run(void)
 		
 		while(power)
 		{
-<<<<<<< HEAD
 			tick = 50;
-=======
->>>>>>> a0ddb475776fb6b1f7ee724198858db08f10ffa8
 			black = false;
 			
 			
-			white_();
+			sumPos();
 			position = getLinePos(white_line = false);
 			
 			//rs232.sendNumber(white_);
 			//rs232.send("\n\n");
 			
-			if(white_()< 500){ // vyjel si z èáry
+			if(sumPos()< 500){ // vyjel si z èáry
 				searchForLine();
 			}
 			
-			if(white_()>2048){
+			if(sumPos()>2048){
 				for (int t;t!=10;t++){
 					setMotorPower(60,40);
 				}
