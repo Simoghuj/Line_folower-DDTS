@@ -25,7 +25,7 @@ int position = 0;
 
 int tick = 50;
 
-bool white_line = true;
+//bool white_line = true;
 bool black = false;
 
 int sumPos(){
@@ -35,7 +35,7 @@ int sumPos(){
 	senzor3 = getSensorValue(3);
 	senzor4 = getSensorValue(4);
 	
-	position = getLinePos(white_line = false);
+	position = getLinePos(/*white_line = false*/);
 	
 	return senzor0 + senzor1 + senzor2 + senzor3 + senzor4;
 }
@@ -70,7 +70,6 @@ void deriv(int p,int speed){
 	}
 }
 
-
 void checkLine(int tick){
 	for (int l;l!=tick ;l++){
 		if (black){
@@ -86,16 +85,24 @@ void checkLine(int tick){
 }
 
 void searchForLine(){
-	for(int x;x<4;x++){
-		setMotorPower(60,50);
-		checkLine(5000);//5000 promena ktera se bude pricitat
-	
-		setMotorPower(0,40);// musi se jeste menit , kvuli ruznemu r kruznuce //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	setMotorPower(-40,40);
+	delay(500);
+	for(int x = 0;x!=2;x++){
+		setMotorPower(50,50);
+		checkLine(5000);
+		setMotorPower(70,-70);
+		delay(500);
+		setMotorPower(70,50);
+		checkLine(5000+1000*x);//5000 promena ktera se bude pricitat
+		setMotorPower(-70,70);// musi se jeste menit , kvuli ruznemu r kruznuce !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		delay(500);
+		setMotorPower(50,50);
+		checkLine(5000);//10000 promena ktera se bude pricitat
+		setMotorPower(-70,70);
 		delay(500);
 		setMotorPower(50,60);
-		checkLine(10000);//10000 promena ktera se bude pricitat
-		
-		setMotorPower(40,0);
+		checkLine(5000+2000*x);
+		setMotorPower(70,-70);
 		delay(500);
 	}
 }
@@ -126,23 +133,28 @@ void run(void)
 			tick = 50;
 			black = false;
 			
-			
 			sumPos();
-			position = getLinePos(white_line = false);
+			position = getLinePos(/*white_line = false*/);
 			
-			//rs232.sendNumber(white_);
-			//rs232.send("\n\n");
+			rs232.sendNumber(sumPos());
+			rs232.send("\n");
 			
 			if(sumPos()< 500){ // vyjel si z èáry
 				searchForLine();
 			}
-			
+
 			if(sumPos()>2048){
 				for (int t;t!=10;t++){
 					setMotorPower(60,40);
 				}
 			}
 			
+			else{
+				deriv(2000,135);
+			}
+			
+			
+			/*
 			if(position<1024){
 				deriv(1000,200);
 			}
@@ -156,7 +168,7 @@ void run(void)
 				deriv(5000,135);
 				}
 			}
-			
+			*/
 			
 		}
     }

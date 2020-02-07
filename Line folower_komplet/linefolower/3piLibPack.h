@@ -637,7 +637,7 @@ inline int16_t getSensorValue(uint8_t index, bool threshold = true)
     }
 
     return res; 
-}
+}	
 
 void resetCalibration()
 {
