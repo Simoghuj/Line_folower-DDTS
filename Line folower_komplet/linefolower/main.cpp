@@ -27,7 +27,11 @@ int tick = 50;
 
 //bool white_line = true;
 bool black = false;
-
+/*
+int object(){
+	
+	};
+*/
 int sumPos(){
 	senzor0 = getSensorValue(0);
 	senzor1 = getSensorValue(1);
@@ -142,7 +146,11 @@ void run(void)
 			if(sumPos()< 500){ // vyjel si z èáry
 				searchForLine();
 			}
-
+			
+			/*if(object<500){
+				around;
+			}
+			*/
 			if(sumPos()>2048){
 				for (int t;t!=10;t++){
 					setMotorPower(60,40);
