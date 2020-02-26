@@ -163,17 +163,17 @@ void run(void)
 			
 			if(position < 1024)//zato? vlevo (nefunguje s0 proto 2000 jinak 1000)
 			{
-				setMotorPower(Motor_ol);
+				setMotorPower(MOTOR_OL);
 				
 			}
 			else if(position < 3072) //??ra pod tebou
 			{
-				setMotorPower(Motor_rov);	
+				setMotorPower(MOTOR_ROV);	
 			}
 			
 			else  // zato? vpravo pokud je position < 4000
 			{
-				setMotorPower(Motor_or);
+				setMotorPower(MOTOR_OR);
 			}
 					
 			
