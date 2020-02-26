@@ -151,16 +151,31 @@ void run(void)
 				around;
 			}
 			*/
-			if(sumPos()>2048){
+			/*if(sumPos()>2048){
 				for (int t;t!=10;t++){
 					setMotorPower(60,40);
 				}
 			}
-			
+			*/
 			else{
 				deriv(2000,135);
 			}
 			
+			if(position < 1024)//zato? vlevo (nefunguje s0 proto 2000 jinak 1000)
+			{
+				setMotorPower(Motor_ol);
+				
+			}
+			else if(position < 3072) //??ra pod tebou
+			{
+				setMotorPower(Motor_rov);	
+			}
+			
+			else  // zato? vpravo pokud je position < 4000
+			{
+				setMotorPower(Motor_or);
+			}
+					
 			
 			/*
 			if(position<1024){
